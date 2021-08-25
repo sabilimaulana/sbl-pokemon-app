@@ -2,6 +2,7 @@ import { Pokemon } from "@common/types/pokemon";
 import axios from "axios";
 
 import Link from "next/link";
+import Image from "next/image";
 
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 
@@ -21,6 +22,12 @@ const Home: NextPage<Props> = ({ pokemons }) => {
             passHref
           >
             <div className="p-4 rounded border-2 mx-4 transform transition duration-300 cursor-pointer hover:scale-110 hover:border-gray-700">
+              <Image
+                src={pokemon.image}
+                alt={pokemon.name}
+                width={200}
+                height={200}
+              />
               <h3 className="text-lg">{pokemon.name}</h3>
               <p>
                 {`Element : ${pokemon.elements.map((element) => element.name)}`}

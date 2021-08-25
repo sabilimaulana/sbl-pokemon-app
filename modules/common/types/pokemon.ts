@@ -8,6 +8,7 @@ export type Pokemon = {
   elements: Element[];
   height: number;
   weight: number;
+  image: string;
   isCatched: boolean;
   createdAt: string;
   updatedAt: string;

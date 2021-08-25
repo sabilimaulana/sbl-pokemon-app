@@ -16,6 +16,10 @@ const pokemonSchema: Schema = new Schema(
       type: Number,
       required: true,
     },
+    image: {
+      type: String,
+      required: true,
+    },
     elements: [{ type: "ObjectId", ref: ElementModel.modelName }],
     isCatched: {
       type: Boolean,

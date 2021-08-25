@@ -1,5 +1,4 @@
 import PokemonModel from "@server/models/pokemon";
-import { Pokemon } from "@server/types/pokemon";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import dbConnect from "@server/services/dbConnect";
@@ -72,18 +71,19 @@ export default async function handler(
       break;
     case "PATCH":
       try {
-        const { name, elements, isCatched, height, weight } = req.body;
+        const { name, elements, isCatched, height, weight, image } = req.body;
 
         if (
           !name ||
           !elements ||
           typeof isCatched !== "boolean" ||
           !height ||
-          !weight
+          !weight ||
+          !image
         ) {
           res.status(401).json({
             status: 401,
-            error: `ValidationError: Pokemon validation failed: name: ${name}, elements: ${elements}, isCatched: ${isCatched}, height: ${height}, weight: ${weight}`,
+            error: `ValidationError: Pokemon validation failed: name: ${name}, elements: ${elements}, isCatched: ${isCatched}, height: ${height}, weight: ${weight}, image: ${image}`,
           });
 
           return;
@@ -95,6 +95,7 @@ export default async function handler(
           isCatched,
           height,
           weight,
+          image,
         });
 
         if (!updatedPokemon) {
