@@ -1,23 +1,21 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-
-const MONGODB_URI = process.env.MONGODB_URI
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error(
-    'Please define the MONGODB_URI environment variable inside .env.local'
-  )
+    "Please define the MONGODB_URI environment variable inside .env.local"
+  );
 }
-let cached = global.mongoose
-
+let cached = global.mongoose;
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null }
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
-async function dbConnect () {
+async function dbConnect() {
   if (cached.conn) {
-    return cached.conn
+    return cached.conn;
   }
 
   if (!cached.promise) {
@@ -27,15 +25,15 @@ async function dbConnect () {
       bufferCommands: false,
       bufferMaxEntries: 0,
       useFindAndModify: false,
-      useCreateIndex: true
-    }
+      useCreateIndex: true,
+    };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then(mongoose => {
-      return mongoose
-    })
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      return mongoose;
+    });
   }
-  cached.conn = await cached.promise
-  return cached.conn
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
-export default dbConnect
+export default dbConnect;

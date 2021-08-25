@@ -1,14 +1,15 @@
-import { Document } from "mongoose";
-import { Element } from "./element";
+import { Element } from "@server/types/element";
 
-export interface Pokemon extends Document {
+export type Pokemons = Pokemon[];
+
+export type Pokemon = {
   _id: string;
   name: string;
+  elements: Element[];
   height: number;
   weight: number;
-  elements: string[];
   isCatched: boolean;
   createdAt: string;
   updatedAt: string;
   __v: number;
-}
+};
