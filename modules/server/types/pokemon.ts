@@ -1,5 +1,4 @@
 import { Document } from "mongoose";
-import { Element } from "./element";
 
 export interface Pokemon extends Document {
   _id: string;

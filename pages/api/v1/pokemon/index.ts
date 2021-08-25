@@ -84,6 +84,4 @@ export default async function handler(
         .json({ status: "Failed", message: "Internal Server Error" });
       break;
   }
-
-  res.status(200);
 }
