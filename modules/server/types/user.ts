@@ -9,3 +9,13 @@ export interface User extends Document {
   updatedAt: string;
   __v: number;
 }
+
+export type UserData = {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};

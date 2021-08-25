@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import UserModel from "@server/models/user";
+import dbConnect from "@server/services/dbConnect";
 
 declare var process: {
   env: {
@@ -17,6 +18,8 @@ export default async function handler(
   const { method } = req;
 
   const JWT_KEY = process.env.JWT_KEY;
+
+  await dbConnect();
 
   switch (method) {
     case "POST":
@@ -47,7 +50,7 @@ export default async function handler(
         });
         const newUser = await newUserModel.save();
 
-        const token = jwt.sign({ email, _id: newUser._id }, JWT_KEY, {
+        const token = jwt.sign({ username, _id: newUser._id }, JWT_KEY, {
           expiresIn: "6h",
         });
 
