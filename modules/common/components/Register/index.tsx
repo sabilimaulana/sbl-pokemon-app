@@ -10,8 +10,10 @@ const Register: NextComponentType = () => {
 
   const [warning, setWarning] = useState("");
 
-  const handleRegister = async () => {
+  const handleRegister = async (e: any) => {
     try {
+      e.preventDefault();
+
       if (!email || !username || !password) {
         setWarning(`Please fill all fields.`);
         return;
@@ -47,7 +49,7 @@ const Register: NextComponentType = () => {
   return (
     <div className="flex flex-col px-8">
       <h1>Register</h1>
-      <div className="flex flex-col flex-1 justify-between">
+      <form className="flex flex-col flex-1 justify-between">
         <input
           className="px-1 border-2 border-gray-400 rounded"
           type="text"
@@ -70,12 +72,13 @@ const Register: NextComponentType = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button
+          type="submit"
           onClick={handleRegister}
           className="px-1 border-2 border-gray-400 rounded hover:bg-gray-200"
         >
           Register
         </button>
-      </div>
+      </form>
       <div className="h-8">
         <p className=" w-64 text-sm overflow-ellipsis">{warning}</p>
       </div>

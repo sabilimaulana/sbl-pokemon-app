@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import dbConnect from "@server/services/dbConnect";
 import ElementModel from "@server/models/element";
+import UserModel from "@server/models/user";
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,7 +35,8 @@ export default async function handler(
       break;
     case "POST":
       try {
-        const { name, elements, isCatched, height, weight, image } = req.body;
+        const { name, elements, isCatched, height, weight, image, owner } =
+          req.body;
 
         if (
           !name ||
@@ -42,7 +44,8 @@ export default async function handler(
           typeof isCatched !== "boolean" ||
           !height ||
           !weight ||
-          !image
+          !image ||
+          !owner
         ) {
           res.status(401).json({
             status: 401,
@@ -59,13 +62,16 @@ export default async function handler(
           height,
           weight,
           image,
+          owner,
         });
 
         const newPokemon = await newPokemonModel.save();
-        const pokemons = await PokemonModel.find().populate({
-          path: "elements",
-          model: ElementModel,
-        });
+        const pokemons = await PokemonModel.find()
+          .populate({
+            path: "elements",
+            model: ElementModel,
+          })
+          .populate({ path: "owner", model: UserModel });
 
         res.status(201).json({
           status: "Success",

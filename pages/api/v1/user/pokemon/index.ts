@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
-import UserModel from "@server/models/user";
+import PokemonModel from "@server/models/pokemon";
 import dbConnect from "@server/services/dbConnect";
 
 declare var process: {
@@ -32,9 +32,11 @@ export default async function handler(
         const decoded: JwtPayload | string = jwt.verify(token, JWT_KEY);
 
         if (typeof decoded === "object") {
-          const user = await UserModel.findById(decoded._id);
+          const pokemons = await PokemonModel.find({
+            owner: decoded._id,
+          }).populate({ path: "elements" });
 
-          res.status(200).json({ user });
+          res.status(200).json({ pokemons });
         }
       } catch (error) {
         if (error.name === "JsonWebTokenError") {

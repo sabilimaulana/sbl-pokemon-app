@@ -9,8 +9,10 @@ const Login: NextComponentType = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: any) => {
     try {
+      e.preventDefault();
+
       if (!username || !password) {
         setWarning("Please fill all fields.");
         return;
@@ -41,7 +43,7 @@ const Login: NextComponentType = () => {
   return (
     <div className="flex flex-col px-8">
       <h1>Login</h1>
-      <div className="flex flex-col flex-1 justify-between">
+      <form className="flex flex-col flex-1 justify-between">
         <input
           className="px-1 border-2 border-gray-400 rounded"
           type="text"
@@ -57,12 +59,13 @@ const Login: NextComponentType = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button
+          type="submit"
           onClick={handleLogin}
           className="px-1 border-2 border-gray-400 rounded hover:bg-gray-200"
         >
           Login
         </button>
-      </div>
+      </form>
 
       <div className="h-8">
         <p className=" w-64 text-sm overflow-ellipsis">{warning}</p>

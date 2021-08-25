@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import dbConnect from "@server/services/dbConnect";
 import ElementModel from "@server/models/element";
+import UserModel from "@server/models/user";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,10 +17,12 @@ export default async function handler(
   switch (method) {
     case "GET":
       try {
-        const pokemon = await PokemonModel.findById(id).populate({
-          path: "elements",
-          model: ElementModel,
-        });
+        const pokemon = await PokemonModel.findById(id)
+          .populate({
+            path: "elements",
+            model: ElementModel,
+          })
+          .populate({ path: "owner", model: UserModel });
 
         if (!pokemon) {
           res.status(400).json({
@@ -71,7 +74,8 @@ export default async function handler(
       break;
     case "PATCH":
       try {
-        const { name, elements, isCatched, height, weight, image } = req.body;
+        const { name, elements, isCatched, height, weight, image, owner } =
+          req.body;
 
         if (
           !name ||
@@ -79,7 +83,8 @@ export default async function handler(
           typeof isCatched !== "boolean" ||
           !height ||
           !weight ||
-          !image
+          !image ||
+          typeof owner !== "string"
         ) {
           res.status(401).json({
             status: 401,
@@ -96,6 +101,7 @@ export default async function handler(
           height,
           weight,
           image,
+          owner,
         });
 
         if (!updatedPokemon) {

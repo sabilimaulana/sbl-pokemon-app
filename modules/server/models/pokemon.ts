@@ -1,12 +1,17 @@
 import { Pokemon } from "@server/types/pokemon";
 import mongoose, { model, Schema } from "mongoose";
 import ElementModel from "./element";
+import UserModel from "./user";
 
 const pokemonSchema: Schema = new Schema(
   {
     name: {
       type: String,
       required: true,
+    },
+    owner: {
+      type: "ObjectId",
+      ref: UserModel.modelName,
     },
     height: {
       type: Number,
