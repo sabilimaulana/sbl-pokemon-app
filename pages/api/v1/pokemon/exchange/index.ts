@@ -1,10 +1,7 @@
 import PokemonModel from "@server/models/pokemon";
-import { Pokemon } from "@server/types/pokemon";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import dbConnect from "@server/services/dbConnect";
-import ElementModel from "@server/models/element";
-import UserModel from "@server/models/user";
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,16 +28,13 @@ export default async function handler(
         const firstPokemonData = await PokemonModel.findById(firstPokemon);
         const secondPokemonData = await PokemonModel.findById(secondPokemon);
 
-        console.log(firstPokemonData);
-        console.log(secondPokemonData);
-
         const updateFirstPokemon = await PokemonModel.findByIdAndUpdate(
           firstPokemon,
           {
             name: firstPokemonData.name,
             elements: firstPokemonData.elements,
-            isCatched: firstPokemonData.isCatched,
-            isExchange: firstPokemonData.isExchange,
+            isCatched: true,
+            isExchange: false,
             height: firstPokemonData.height,
             weight: firstPokemonData.weight,
             image: firstPokemonData.image,
@@ -56,8 +50,8 @@ export default async function handler(
           {
             name: secondPokemonData.name,
             elements: secondPokemonData.elements,
-            isCatched: secondPokemonData.isCatched,
-            isExchange: secondPokemonData.isExchange,
+            isCatched: true,
+            isExchange: false,
             height: secondPokemonData.height,
             weight: secondPokemonData.weight,
             image: secondPokemonData.image,

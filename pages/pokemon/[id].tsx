@@ -61,8 +61,6 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
 
   const handleRelease = async () => {
     try {
-      setWarning("");
-
       const elements = pokemon.elements.map((element) => {
         return element._id;
       });
@@ -87,7 +85,36 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
       if (res.data.status === "Success") {
         window.location.reload();
       }
-      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleExchange = async (type: string) => {
+    try {
+      const elements = pokemon.elements.map((element) => {
+        return element._id;
+      });
+
+      const data = {
+        name: pokemon.name,
+        elements,
+        owner: pokemon.owner._id,
+        isCatched: true,
+        isExchange: type === "in" ? true : false,
+        height: pokemon.height,
+        weight: pokemon.weight,
+        image: pokemon.image,
+      };
+
+      const res = await axios.patch(
+        `http://localhost:3000/api/v1/pokemon/${pokemon._id}`,
+        data
+      );
+
+      if (res.data.status === "Success") {
+        window.location.reload();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -120,6 +147,26 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
               {userContext._id === pokemon.owner._id ? (
                 <>
                   <p>This pokemon is already belongs to you</p>
+
+                  {!pokemon.isExchange ? (
+                    <button
+                      onClick={() => handleExchange("in")}
+                      className="py-2 px-4 rounded mt-2  w-40 bg-yellow-500 text-white hover:bg-yellow-800"
+                    >
+                      Send To Exchange Center
+                    </button>
+                  ) : (
+                    <>
+                      <p>This pokemon is already at exchange center</p>
+                      <button
+                        onClick={() => handleExchange("out")}
+                        className="py-2 px-4 rounded mt-2  w-40 bg-yellow-500 text-white hover:bg-yellow-800"
+                      >
+                        Take From Exchange Center
+                      </button>
+                    </>
+                  )}
+
                   <button
                     onClick={handleRelease}
                     className="py-2 px-4 rounded mt-2  w-24 bg-red-500 text-white hover:bg-red-800"
@@ -128,10 +175,15 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
                   </button>
                 </>
               ) : pokemon.isCatched ? (
-                <p>
-                  {"This pokemon is already belongs to "}
-                  <span className="font-bold">{pokemon.owner.username}</span>
-                </p>
+                <>
+                  <p>
+                    {"This pokemon is already belongs to "}
+                    <span className="font-bold">{pokemon.owner.username}</span>
+                  </p>
+                  {pokemon.isExchange && (
+                    <p>This pokemon is ready to exchange at exchange center</p>
+                  )}
+                </>
               ) : userContext.username === "" ? (
                 <>
                   <p>

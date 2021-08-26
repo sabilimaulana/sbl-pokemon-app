@@ -48,7 +48,7 @@ const Navbar: NextComponentType = () => {
             My Pokemon List
           </button>
           <button
-            // onClick={() => Router.push("/my-pokemon")}
+            onClick={() => Router.push("/exchange-center")}
             className="rounded bg-white border-2 border-blue-600 hover:bg-blue-600 hover:text-white py-2 px-4 text-blue-600"
           >
             Exchange Center

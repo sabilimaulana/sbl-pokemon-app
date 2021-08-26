@@ -12,6 +12,7 @@ export type Pokemon = {
   owner: User;
   image: string;
   isCatched: boolean;
+  isExchange: boolean;
   createdAt: string;
   updatedAt: string;
   __v: number;

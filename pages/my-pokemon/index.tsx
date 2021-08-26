@@ -16,7 +16,7 @@ type Props = {
 const MyPokemon: NextPage<Props> = ({ pokemons, user }) => {
   const { login } = useAuth();
 
-  if (user.username !== "") {
+  if (user) {
     login(user);
   }
 
