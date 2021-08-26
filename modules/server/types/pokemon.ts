@@ -7,6 +7,8 @@ export interface Pokemon extends Document {
   weight: number;
   image: string;
   owner: string;
+  wantedPokemonId: string;
+  wantedPokemonName: string;
   elements: string[];
   isCatched: boolean;
   isExchange: boolean;

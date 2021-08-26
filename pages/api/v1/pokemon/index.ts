@@ -44,6 +44,8 @@ export default async function handler(
           image,
           owner,
           isExchange,
+          wantedPokemonId,
+          wantedPokemonName,
         } = req.body;
 
         if (
@@ -51,6 +53,8 @@ export default async function handler(
           !elements ||
           typeof isCatched !== "boolean" ||
           typeof isExchange !== "boolean" ||
+          typeof wantedPokemonId !== "string" ||
+          typeof wantedPokemonName !== "string" ||
           !height ||
           !weight ||
           !image ||
@@ -73,6 +77,8 @@ export default async function handler(
           weight,
           image,
           owner,
+          wantedPokemonId,
+          wantedPokemonName,
         });
 
         const newPokemon = await newPokemonModel.save();
@@ -89,6 +95,7 @@ export default async function handler(
           pokemons,
         });
       } catch (error) {
+        console.log(error);
         res
           .status(500)
           .json({ status: "Failed", message: "Internal Server Error" });

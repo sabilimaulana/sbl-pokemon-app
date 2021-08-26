@@ -83,6 +83,8 @@ export default async function handler(
           image,
           owner,
           isExchange,
+          wantedPokemonId,
+          wantedPokemonName,
         } = req.body;
 
         if (
@@ -90,6 +92,8 @@ export default async function handler(
           !elements ||
           typeof isCatched !== "boolean" ||
           typeof isExchange !== "boolean" ||
+          typeof wantedPokemonId !== "string" ||
+          typeof wantedPokemonName !== "string" ||
           !height ||
           !weight ||
           !image ||
@@ -112,6 +116,8 @@ export default async function handler(
           weight,
           image,
           owner,
+          wantedPokemonId,
+          wantedPokemonName,
         });
 
         if (!updatedPokemon) {

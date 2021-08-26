@@ -12,16 +12,32 @@ import { useState } from "react";
 
 type Props = {
   pokemon: Pokemon;
+  pokemons: Pokemon[];
   user: User;
 };
 
-const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
+const PokemonDetail: NextPage<Props> = ({ pokemon, user, pokemons }) => {
   const { login, user: userContext } = useAuth();
   const [warning, setWarning] = useState("");
+  const [wantedPokemon, setWantedPokemon] = useState("select");
+  const [wantedPokemonNameState, setWantedPokemonNameState] = useState("");
+
+  const [warningWanted, setWarningWanted] = useState("");
 
   if (user) {
     login(user);
   }
+
+  const handleWantedPokemon = (pokemonId: any) => {
+    setWantedPokemon(pokemonId);
+
+    const wantedPokemonName = pokemons.map((pokemon) => {
+      if (pokemon._id === pokemonId) {
+        setWantedPokemonNameState(pokemon.name);
+      }
+    });
+  };
+
   const handleCatch = async () => {
     if (probability(0.25)) {
       try {
@@ -37,6 +53,8 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
           isCatched: true,
           isExchange: false,
           owner: userContext._id,
+          wantedPokemonId: "0",
+          wantedPokemonName: "0",
           height: pokemon.height,
           weight: pokemon.weight,
           image: pokemon.image,
@@ -70,6 +88,9 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
         elements,
         // Reset the owner to the admin id
         owner: "6126440d6357cd4669a3251f",
+        // Reset
+        wantedPokemonId: "0",
+        wantedPokemonName: "0",
         isCatched: false,
         isExchange: false,
         height: pokemon.height,
@@ -90,22 +111,33 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
     }
   };
 
-  const handleExchange = async (type: string) => {
+  const handlePostExchange = async (type: string) => {
     try {
       const elements = pokemon.elements.map((element) => {
         return element._id;
       });
 
+      if (type === "in" && wantedPokemon === "select") {
+        setWarningWanted("Please select the wanted pokemon first!");
+        return;
+      }
+
+      setWarningWanted("");
+
       const data = {
         name: pokemon.name,
         elements,
         owner: pokemon.owner._id,
+        wantedPokemonId: type === "in" ? wantedPokemon : "0",
+        wantedPokemonName: type === "in" ? wantedPokemonNameState : "0",
         isCatched: true,
         isExchange: type === "in" ? true : false,
         height: pokemon.height,
         weight: pokemon.weight,
         image: pokemon.image,
       };
+
+      console.log(data);
 
       const res = await axios.patch(
         `http://localhost:3000/api/v1/pokemon/${pokemon._id}`,
@@ -149,17 +181,39 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
                   <p>This pokemon is already belongs to you</p>
 
                   {!pokemon.isExchange ? (
-                    <button
-                      onClick={() => handleExchange("in")}
-                      className="py-2 px-4 rounded mt-2  w-40 bg-yellow-500 text-white hover:bg-yellow-800"
-                    >
-                      Send To Exchange Center
-                    </button>
+                    <div className="flex flex-col border-2 p-4">
+                      <p className="text-lg font-bold">Exchange</p>
+                      <p className="text-red-500">{warningWanted}</p>
+                      <div className="flex flex-row">
+                        <p>Pokemon that you wanted</p>
+                        <select
+                          onChange={(e) => handleWantedPokemon(e.target.value)}
+                          name="wanted"
+                          id="wanted"
+                          className="ml-4 w-40"
+                        >
+                          <option value="select">Select</option>
+                          {pokemons.map((pokemon) => {
+                            return (
+                              <option key={pokemon._id} value={pokemon._id}>
+                                {pokemon.name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                      <button
+                        onClick={() => handlePostExchange("in")}
+                        className="py-2 px-4 rounded mt-2  w-40 bg-yellow-500 text-white hover:bg-yellow-800"
+                      >
+                        Send To Exchange Center
+                      </button>
+                    </div>
                   ) : (
                     <>
                       <p>This pokemon is already at exchange center</p>
                       <button
-                        onClick={() => handleExchange("out")}
+                        onClick={() => handlePostExchange("out")}
                         className="py-2 px-4 rounded mt-2  w-40 bg-yellow-500 text-white hover:bg-yellow-800"
                       >
                         Take From Exchange Center
@@ -222,6 +276,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const res = await axios.get(`http://localhost:3000/api/v1/pokemon/${id}`);
   const pokemon: Pokemon = res.data.pokemon;
 
+  const resPokemons = await axios.get("http://localhost:3000/api/v1/pokemon");
+
+  const pokemons = resPokemons.data.pokemons;
+
   const allCookies = cookies(ctx);
 
   const user = await axios
@@ -238,6 +296,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (!user) {
     return {
       props: {
+        pokemons,
         pokemon,
       },
     };
@@ -245,6 +304,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
+      pokemons,
       pokemon,
       user,
     },

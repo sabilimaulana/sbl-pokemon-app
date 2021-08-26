@@ -11,6 +11,8 @@ export type Pokemon = {
   weight: number;
   owner: User;
   image: string;
+  wantedPokemonId: string;
+  wantedPokemonName: string;
   isCatched: boolean;
   isExchange: boolean;
   createdAt: string;

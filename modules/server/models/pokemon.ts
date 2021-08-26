@@ -34,6 +34,14 @@ const pokemonSchema: Schema = new Schema(
       type: Boolean,
       required: true,
     },
+    wantedPokemonId: {
+      type: String,
+      required: true,
+    },
+    wantedPokemonName: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
