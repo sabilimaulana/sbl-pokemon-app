@@ -35,6 +35,7 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
           name: pokemon.name,
           elements,
           isCatched: true,
+          isExchange: false,
           owner: userContext._id,
           height: pokemon.height,
           weight: pokemon.weight,
@@ -72,6 +73,7 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
         // Reset the owner to the admin id
         owner: "6126440d6357cd4669a3251f",
         isCatched: false,
+        isExchange: false,
         height: pokemon.height,
         weight: pokemon.weight,
         image: pokemon.image,
@@ -94,60 +96,65 @@ const PokemonDetail: NextPage<Props> = ({ pokemon, user }) => {
   return (
     <>
       <Navbar />
-      <div className="p-8 flex border-2 mx-8 mt-4">
-        <div className="mr-8">
-          <Image
-            src={pokemon.image}
-            alt={pokemon.name}
-            width={300}
-            height={300}
-          />
-        </div>
-        <div className="flex flex-col">
-          <h3 className="text-lg">{pokemon.name}</h3>
-          <p>{`Element : ${pokemon.elements.map(
-            (element) => element.name
-          )}`}</p>
-          <p>{`Height : ${pokemon.height}`}</p>
-          <p>{`Weight : ${pokemon.weight}`}</p>
+      <div className="p-8 flex flex-col border-2 mx-8 mt-4">
+        <h1 className="text-3xl p-8">Pokemon Detail</h1>
 
-          <div className="flex flex-col">
-            {userContext._id === pokemon.owner._id ? (
-              <>
-                <p>This pokemon is already belongs to you</p>
-                <button
-                  onClick={handleRelease}
-                  className="py-2 px-4 rounded mt-2  w-24 bg-red-500 text-white hover:bg-red-800"
-                >
-                  Release
-                </button>
-              </>
-            ) : pokemon.isCatched ? (
-              <p>
-                {"This pokemon is already belongs to "}
-                <span className="font-bold">{pokemon.owner.username}</span>
-              </p>
-            ) : userContext.username === "" ? (
-              <>
+        <div className="flex flex-row ">
+          <div className="mr-8 border-2">
+            <Image
+              src={pokemon.image}
+              alt={pokemon.name}
+              width={300}
+              height={300}
+            />
+          </div>
+          <div className="flex flex-col flex-1 p-4 border-2">
+            <h3 className="text-lg">{pokemon.name}</h3>
+            <p>{`Element : ${pokemon.elements.map(
+              (element) => element.name
+            )}`}</p>
+            <p>{`Height : ${pokemon.height}`}</p>
+            <p>{`Weight : ${pokemon.weight}`}</p>
+
+            <div className="flex flex-col">
+              {userContext._id === pokemon.owner._id ? (
+                <>
+                  <p>This pokemon is already belongs to you</p>
+                  <button
+                    onClick={handleRelease}
+                    className="py-2 px-4 rounded mt-2  w-24 bg-red-500 text-white hover:bg-red-800"
+                  >
+                    Release
+                  </button>
+                </>
+              ) : pokemon.isCatched ? (
                 <p>
-                  If you want to catch this pokemon, please register or login
-                  first!
+                  {"This pokemon is already belongs to "}
+                  <span className="font-bold">{pokemon.owner.username}</span>
                 </p>
-                <button className="py-2 px-4 w-24 rounded mt-2 bg-gray-500 text-white cursor-not-allowed">
-                  Catch!
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={handleCatch}
-                  className="py-2 px-4 rounded mt-2  w-24 bg-blue-500 text-white hover:bg-blue-800"
-                >
-                  Catch!
-                </button>
-                <p>{warning}</p>
-              </>
-            )}
+              ) : userContext.username === "" ? (
+                <>
+                  <p>
+                    If you want to catch this pokemon, please register or login
+                    first!
+                  </p>
+                  <button className="py-2 px-4 w-24 rounded mt-2 bg-gray-500 text-white cursor-not-allowed">
+                    Catch!
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p>Your chance is 25%</p>
+                  <button
+                    onClick={handleCatch}
+                    className="py-2 px-4 rounded mt-2  w-24 bg-blue-500 text-white hover:bg-blue-800"
+                  >
+                    Catch!
+                  </button>
+                  <p>{warning}</p>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

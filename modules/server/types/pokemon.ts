@@ -9,6 +9,7 @@ export interface Pokemon extends Document {
   owner: string;
   elements: string[];
   isCatched: boolean;
+  isExchange: boolean;
   createdAt: string;
   updatedAt: string;
   __v: number;

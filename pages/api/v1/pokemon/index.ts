@@ -35,13 +35,22 @@ export default async function handler(
       break;
     case "POST":
       try {
-        const { name, elements, isCatched, height, weight, image, owner } =
-          req.body;
+        const {
+          name,
+          elements,
+          isCatched,
+          height,
+          weight,
+          image,
+          owner,
+          isExchange,
+        } = req.body;
 
         if (
           !name ||
           !elements ||
           typeof isCatched !== "boolean" ||
+          typeof isExchange !== "boolean" ||
           !height ||
           !weight ||
           !image ||
@@ -59,6 +68,7 @@ export default async function handler(
           name,
           elements,
           isCatched,
+          isExchange,
           height,
           weight,
           image,

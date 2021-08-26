@@ -30,6 +30,10 @@ const pokemonSchema: Schema = new Schema(
       type: Boolean,
       required: true,
     },
+    isExchange: {
+      type: Boolean,
+      required: true,
+    },
   },
   { timestamps: true }
 );
